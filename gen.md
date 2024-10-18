@@ -81,6 +81,59 @@ Instructions for Creating the TokenScript
         <!-- Add additional cards as needed -->
     </ts:cards>
 ```
+
+Detailed Instructions for each card type:
+
+Let's generate the cards for each solidity function in the contract.
+
+To generate the cards for each solidity function in the contract, we need to follow these steps:
+
+i. Generate the card header. This will always be type="action" for a transaction. for the card name, use the solidity function name. "Origins" will usually be the origin contract defined in step 7.
+```xml
+<ts:card type="action" name="mint" buttonClass="primary" origins="ThisToken">
+```
+ii. Generate the label. This will be the label of the button on the main token page.
+```xml
+<ts:label>
+    <ts:string xml:lang="en">Mint</ts:string>
+</ts:label>
+```
+iii. Generate the transaction. This will be the transaction details for the card.
+
+In order to generate the transaction, we need to know the function name, and parameters.
+for Example here's an ERC20 mint function:
+```solidity
+function mint(address to, uint256 amount) public
+```
+Here's the XML for that transaction. Note that there are two parameters in this function, "to" and "amount". These are the parameters that the user will input, as such they are refered to as local-ref. "ref" refers to global types such as the contract address, tokenId.
+```xml
+<ts:transaction>
+    <ethereum:transaction function="mint" contract="ThisToken">
+        <ts:data>
+                <ts:address local-ref="to" />
+                <ts:uint256 local-ref="amount" />
+        </ts:data>
+    </ethereum:transaction>
+</ts:transaction>
+```
+
+iv. Generate the view. This will be the view that is displayed when the card is clicked.
+```xml
+<ts:view xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+        <p>Enter the address to mint tokens to and the amount of tokens to mint.</p>
+        <label for="to">Recipient Address:</label>
+        <input type="text" id="to" name="to" placeholder="0x..."/>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" placeholder="100"/>
+</ts:view>
+```
+v. Close the card tag
+```xml
+</ts:card>
+```
+
+
+
 9. Now close the token tag
 ```xml
 </ts:token>
